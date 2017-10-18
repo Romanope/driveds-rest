@@ -1,0 +1,19 @@
+{
+  "name": "driveds_rest_layer",
+  "version": "1.0.0",
+  "description": "camada rest da aplicação driveds",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "fs": "0.0.1-security",
+    "mysql": "^2.15.0",
+    "path": "^0.12.7",
+    "querystring": "^0.2.0"
+  }
+}
