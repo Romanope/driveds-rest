@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
-var pathDefault = "D:\\projetos\\faculdade\\2017.2\\sistemas-distribuidos\\arq-recebidos\\";
+var pathDefault = "/home/ubuntu/";
 var walk = require("walk");
 
 var controladorDiretorio = {
@@ -25,7 +25,7 @@ var controladorDiretorio = {
  				fileSearched = fileStats.name;
  			}
 
-		    var data = fs.readFileSync(pathUser + "\\" + fileStats.name);
+		    var data = fs.readFileSync(pathUser + "/" + fileStats.name);
 		    data = JSON.parse(JSON.stringify(data));
 		    
 		    if (file && (!nextFile)) {

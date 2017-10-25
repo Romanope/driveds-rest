@@ -4,7 +4,7 @@ var fs = require("fs");
 var qs = require('querystring');
 var controllerUsuario = require('.././controllers/controladorUsuario');
 var controladorDiretorio = require('.././controllers/controladorDiretorio');
-var path = "D:\\projetos\\faculdade\\2017.2\\sistemas-distribuidos\\arq-recebidos\\";
+var path = "/home/ubuntu/";
 
 router.post('/', function (req, res) {
 	console.log("arquivo recebido");
@@ -18,7 +18,7 @@ router.post('/', function (req, res) {
 
 router.delete('/:nomeArquivo/:usuario', function (req, res) {
 	console.log("Apagando arquivo " + req.params.nomeArquivo);
-	var currentPath = path + req.params.usuario + "\\" + req.params.nomeArquivo;
+	var currentPath = path + req.params.usuario + "/" + req.params.nomeArquivo;
 	fs.unlinkSync(currentPath);
 	console.log("Arquivo " + req.params.nomeArquivo + " removido com sucesso!");
 	res.status(200).json(req.body);	
@@ -29,7 +29,7 @@ function writeFile(usuario, nome, data) {
 	if (!fs.existsSync(currentPath)){
     	fs.mkdirSync(currentPath);
 	}	
-	currentPath = path + usuario + "\\" + nome;
+	currentPath = path + usuario + "/" + nome;
 
 	var buff = new Buffer(data, 'base64');
 	fs.writeFile(currentPath, buff, 0, buff.length, 0, function(err) {
@@ -49,7 +49,7 @@ router.get('/:usuario', function (req, res) {
 	
 	var absolutePath;
 	fs.readdirSync(currentPath).forEach(nomeArq => {
-		absolutePath = currentPath + "\\" + nomeArq;
+		absolutePath = currentPath + "/" + nomeArq;
 		var data = fs.readFileSync(absolutePath);
 		var file = {
 			nome: nomeArq,
