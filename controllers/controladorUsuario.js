@@ -35,7 +35,44 @@ var controllerUsuario =  {
 			    callback(results[0]);
 			});
 		});
-	}
+	},
+	consultarArqCompartilhados: function (login, callback) {
+		var query = 'select usu.USU_LOGIN as loginProp, comp.FILE_NAME as file, usu2.USU_LOGIN as loginComp from driveds.compartilhamento comp' + 
+                    ' inner join driveds.usuario usu on usu.USU_ID = comp.USU_ID_PROP' +
+					' inner join driveds.usuario usu2 on usu2.USU_ID = comp.USU_ID_COMP' + 
+					' where usu2.USU_LOGIN = ?';
+		var params = [login];
+		pool.getConnection(function(err, connection) {
+	    	// Use the connection
+		    connection.query(query, params, function (error, results, fields) {
+		    	// And done with the connection.
+			    connection.release();
+			    // Handle error after the release.
+			    if (error) throw error;
+			    
+			    callback(JSON.parse(JSON.stringify(results)));
+			});
+		});
+
+	},
+	consultarArqComparPorArqEUsuario: function (login, fileName, callback) {
+		var query = 'select usu.USU_LOGIN as loginProp, comp.FILE_NAME as file, usu2.USU_LOGIN as loginComp from driveds.compartilhamento comp' + 
+                    ' inner join driveds.usuario usu on usu.USU_ID = comp.USU_ID_PROP' +
+					' inner join driveds.usuario usu2 on usu2.USU_ID = comp.USU_ID_COMP' + 
+					' where usu2.USU_LOGIN = ? and comp.FILE_NAME = ?';
+		var params = [login, fileName];
+		pool.getConnection(function(err, connection) {
+	    	// Use the connection
+		    connection.query(query, params, function (error, results, fields) {
+		    	// And done with the connection.
+			    connection.release();
+			    // Handle error after the release.
+			    if (error) throw error;
+			    
+			    callback(JSON.parse(JSON.stringify(results)));
+			});
+		});
+	},
 }
 
 module.exports = controllerUsuario;
