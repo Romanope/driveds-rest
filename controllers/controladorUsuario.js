@@ -5,7 +5,7 @@ var controllerUsuario =  {
 
 		if (!usuario) return;
 		console.log(usuario);
-		var insert = "insert into `usuario` (`USU_LOGIN`, `USU_SENHA`, `USU_EMAIL`, 'USU_DIRE_ARQUIVO', `USU_DH_CADASTRO`) values (?)";
+		var insert = "insert into `USUARIO` (`USU_LOGIN`, `USU_SENHA`, `USU_EMAIL`, 'USU_DIRE_ARQUIVO', `USU_DH_CADASTRO`) values (?)";
 		var params = [usuario.login, usuario.senha, usuario.email, "diretorio", new Date()];
 		
 		pool.getConnection(function(err, connection) {
@@ -23,7 +23,7 @@ var controllerUsuario =  {
 	}, 
 	consultar: function (login, callback) {
 		console.log('consultando usuario: ' + login);
-		var select = "select usu_id as id, usu_login as login, usu_senha as senha from usuario where usu_login = '" + login + "'";
+		var select = "select usu_id as id, usu_login as login, usu_senha as senha from USUARIO where usu_login = '" + login + "'";
 		pool.getConnection(function(err, connection) {
 	    	// Use the connection
 		    connection.query(select, function (error, results, fields) {
@@ -37,7 +37,7 @@ var controllerUsuario =  {
 		});
 	},
 	consultarArqCompartilhados: function (login, callback) {
-		var query = 'select usu.USU_LOGIN as loginProp, comp.FILE_NAME as file, usu2.USU_LOGIN as loginComp from driveds.compartilhamento comp' + 
+		var query = 'select usu.USU_LOGIN as loginProp, comp.FILE_NAME as file, usu2.USU_LOGIN as loginComp from COMPARTILHAMENTO comp' + 
                     ' inner join driveds.usuario usu on usu.USU_ID = comp.USU_ID_PROP' +
 					' inner join driveds.usuario usu2 on usu2.USU_ID = comp.USU_ID_COMP' + 
 					' where usu2.USU_LOGIN = ?';
@@ -56,7 +56,7 @@ var controllerUsuario =  {
 
 	},
 	consultarArqComparPorArqEUsuario: function (login, fileName, callback) {
-		var query = 'select usu.USU_LOGIN as loginProp, comp.FILE_NAME as file, usu2.USU_LOGIN as loginComp from driveds.compartilhamento comp' + 
+		var query = 'select usu.USU_LOGIN as loginProp, comp.FILE_NAME as file, usu2.USU_LOGIN as loginComp from COMPARTILHAMENTO comp' + 
                     ' inner join driveds.usuario usu on usu.USU_ID = comp.USU_ID_PROP' +
 					' inner join driveds.usuario usu2 on usu2.USU_ID = comp.USU_ID_COMP' + 
 					' where usu2.USU_LOGIN = ? and comp.FILE_NAME = ?';
