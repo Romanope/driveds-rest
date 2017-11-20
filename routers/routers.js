@@ -4,8 +4,8 @@ var fs = require("fs");
 var qs = require('querystring');
 var controllerUsuario = require('.././controllers/controladorUsuario');
 var controladorDiretorio = require('.././controllers/controladorDiretorio');
-/*var path = "/home/ubuntu/";*/
-var path = "D:/projetos/faculdade/2017.2/sistemas-distribuidos/arq-recebidos/";
+var path = (process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']) + '/driveds/all-files-users/';
+/*var path = "D:/projetos/faculdade/2017.2/sistemas-distribuidos/arq-recebidos/";*/
 
 router.post('/', function (req, res) {
 	console.log("arquivo recebido");
@@ -19,7 +19,7 @@ router.post('/', function (req, res) {
 
 router.delete('/:nomeArquivo/:usuario', function (req, res) {
 	console.log("Apagando arquivo " + req.params.nomeArquivo);
-	var currentPath = path + req.params.usuario + "\\" + req.params.nomeArquivo;
+	var currentPath = path + req.params.usuario + "/" + req.params.nomeArquivo;
 	fs.unlinkSync(currentPath);
 	console.log("Arquivo " + req.params.nomeArquivo + " removido com sucesso!");
 	res.status(200).json(req.body);	
@@ -30,7 +30,7 @@ function writeFile(usuario, nome, data) {
 	if (!fs.existsSync(currentPath)){
     	fs.mkdirSync(currentPath);
 	}	
-	currentPath = path + usuario + "\\" + nome;
+	currentPath = path + usuario + "/" + nome;
 
 	var buff = new Buffer(data, 'base64');
 	fs.writeFile(currentPath, buff, 0, buff.length, 0, function(err) {
@@ -64,6 +64,7 @@ var consultarArquivoCompartilhados = function (login, list, callback) {
 		var sizeList = data.length + list.length;
 		console.log('limite ' + sizeList);
 		for (var i = 0; i < data.length; i++) {
+			console.log('limite2');
 			var comp = data[i];
 			
 			console.log('index ' + i + ':');
@@ -77,6 +78,7 @@ var consultarArquivoCompartilhados = function (login, list, callback) {
 			
 			readFile(absolutePath, list, loginProp, fileName, callback, sizeList);
 		}
+		console.log('finalizou o for');
 	});
 }
 
@@ -99,9 +101,10 @@ router.get('/:usuario', function (req, res) {
 		files.push(file);
 	});
 
-	consultarArquivoCompartilhados(usuario, files, function (list) {
+	res.status(200).json(files);	
+	/*consultarArquivoCompartilhados(usuario, files, function (list) {
 		res.status(200).json(list);	
-	});
+	});*/
 });
 
 router.get('/sincronizar/:usuario/:fileName', function (req, res) {
@@ -132,7 +135,7 @@ router.get('/sincronizar/:usuario/:fileName', function (req, res) {
 					console.log('retornando arquivo ' + result.nome);
 					res.status(200).json(result).end();	
 				} else {
-					console.log('iniciando consulta de arquivos compartilhados');
+					/*console.log('iniciando consulta de arquivos compartilhados');
 					controllerUsuario.consultarArqCompartilhados(req.params.usuario, function (compartilhamentos) {
 						console.log('resultado da consulta: ');
 						console.log(compartilhamentos);
@@ -141,7 +144,8 @@ router.get('/sincronizar/:usuario/:fileName', function (req, res) {
 							console.log('retornando arquivo ' + result.nome);
 							res.status(200).json(result).end();
 						} 
-					});
+					});*/
+					res.status(200).json(result).end();
 				}
 			} else {
 				result = {
@@ -153,6 +157,34 @@ router.get('/sincronizar/:usuario/:fileName', function (req, res) {
 		});	
 	}
 	
+});
+
+router.post('/listFilesToDownload', function (req, res) {
+	
+	var lista = req.body;
+
+	console.log(lista.usuario);
+
+	console.log(lista.nomeArquivos);
+	
+	controladorDiretorio.consultarNomeArquivosParaDownload(lista.usuario, lista.nomeArquivos, function (fileNames) {
+		var file = {
+			usuario: lista.usuario,
+			nomeArquivos: fileNames
+		}
+		res.status(200).json(file);
+	});
+});
+
+router.post('/obterArquivo', function (req, res) {
+
+	var usuario = req.body.usuario;
+	var fileName = req.body.nome;
+
+	var file = controladorDiretorio.consultarArquivoByusuario(usuario, fileName);
+
+	res.status(200).json(file);
+
 });
 
 module.exports = router;

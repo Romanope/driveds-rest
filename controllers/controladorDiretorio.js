@@ -2,7 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
 /*var pathDefault = "/home/ubuntu/";*/
-var pathDefault = "D:\\projetos\\faculdade\\2017.2\\sistemas-distribuidos\\arq-recebidos\\";
+var pathDefault = (process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']) + '/driveds/all-files-users/';
 var walk = require("walk");
 
 var controladorDiretorio = {
@@ -26,7 +26,7 @@ var controladorDiretorio = {
  				fileSearched = fileStats.name;
  			}
 
-		    var data = fs.readFileSync(pathUser + "\\" + fileStats.name);
+		    var data = fs.readFileSync(pathUser + "/" + fileStats.name);
 		    data = JSON.parse(JSON.stringify(data));
 		    
 		    if (file && (!nextFile)) {
@@ -62,6 +62,44 @@ var controladorDiretorio = {
 			}
 		}
 		return null;
+	},
+	consultarNomeArquivosParaDownload: function (usuario, nomeArqsLocal, callback) {
+
+
+		var pathUser = pathDefault + usuario;
+		walker = walk.walk(pathUser);
+ 
+ 		var filesName = [];
+ 		walker.on("file", function (root, file, next) {
+		    
+		    var download = true;
+		    if (nomeArqsLocal) {
+		    	for (var i = 0; i < nomeArqsLocal.length; i++) {
+		    		if (file.name == nomeArqsLocal[i]) {
+		    			download = false;
+		    		}
+		    	}
+ 			}
+			if (download) {
+				filesName[filesName.length] = file.name;
+			}
+		    next();
+		});
+	  	walker.on("end", function () {
+	  		console.log('Arquivos para download do usuario: ' + usuario);
+	  		console.log(filesName);
+    		callback(filesName);
+  		});
+	},
+	consultarArquivoByusuario: function (usuario, fileName) {
+	
+		var currentPath = pathDefault + usuario + '/' + fileName;
+		var data = fs.readFileSync(absolutePath);
+		return {
+			nome: nomeArq,
+			conteudo: data,
+			usuario: usuario
+		};
 	}
 }
 

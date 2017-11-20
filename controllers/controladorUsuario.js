@@ -38,8 +38,8 @@ var controllerUsuario =  {
 	},
 	consultarArqCompartilhados: function (login, callback) {
 		var query = 'select usu.USU_LOGIN as loginProp, comp.FILE_NAME as file, usu2.USU_LOGIN as loginComp from COMPARTILHAMENTO comp' + 
-                    ' inner join driveds.usuario usu on usu.USU_ID = comp.USU_ID_PROP' +
-					' inner join driveds.usuario usu2 on usu2.USU_ID = comp.USU_ID_COMP' + 
+                    ' inner join driveds.USUARIO usu on usu.USU_ID = comp.USU_ID_PROP' +
+					' inner join driveds.USUARIO usu2 on usu2.USU_ID = comp.USU_ID_COMP' + 
 					' where usu2.USU_LOGIN = ?';
 		var params = [login];
 		pool.getConnection(function(err, connection) {
@@ -57,8 +57,8 @@ var controllerUsuario =  {
 	},
 	consultarArqComparPorArqEUsuario: function (login, fileName, callback) {
 		var query = 'select usu.USU_LOGIN as loginProp, comp.FILE_NAME as file, usu2.USU_LOGIN as loginComp from COMPARTILHAMENTO comp' + 
-                    ' inner join driveds.usuario usu on usu.USU_ID = comp.USU_ID_PROP' +
-					' inner join driveds.usuario usu2 on usu2.USU_ID = comp.USU_ID_COMP' + 
+                    ' inner join driveds.USUARIO usu on usu.USU_ID = comp.USU_ID_PROP' +
+					' inner join driveds.USUARIO usu2 on usu2.USU_ID = comp.USU_ID_COMP' + 
 					' where usu2.USU_LOGIN = ? and comp.FILE_NAME = ?';
 		var params = [login, fileName];
 		pool.getConnection(function(err, connection) {
