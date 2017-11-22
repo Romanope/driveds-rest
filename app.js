@@ -2,7 +2,7 @@ var express 	= require("express");
 var app 		= express();
 var bodyParser  = require('body-parser');
 var path       	= require('path');
-var routers     = require('./routers/routers');
+var routers     = require('./routers/arquivoRouters');
 var usuarioRouters     = require('./routers/usuarioRouters');
 
 // parse application/x-www-form-urlencoded

@@ -2,8 +2,9 @@ var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
 /*var pathDefault = "/home/ubuntu/";*/
-var pathDefault = (process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']) + '/driveds/all-files-users/';
+var pathDefault = (process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME']) + '/driveds-storage/all-files-users/';
 var walk = require("walk");
+var amazonS3Adapter = require('.././amazonS3Adapter');
 
 var controladorDiretorio = {
 	listAllFiles: function (usuario, fileName, callback) {
@@ -91,15 +92,11 @@ var controladorDiretorio = {
     		callback(filesName);
   		});
 	},
-	consultarArquivoByusuario: function (usuario, fileName) {
+	consultarArquivoByusuario: function (usuario, fileName, callback) {
 	
-		var currentPath = pathDefault + usuario + '/' + fileName;
-		var data = fs.readFileSync(absolutePath);
-		return {
-			nome: nomeArq,
-			conteudo: data,
-			usuario: usuario
-		};
+		amazonS3Adapter.downloadFile(usuario, fileName, function (file) {
+			callback(file);
+		});
 	}
 }
 
