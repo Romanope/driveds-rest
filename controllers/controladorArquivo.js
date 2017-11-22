@@ -68,7 +68,7 @@ var controladorArquivo =  {
 	},
 	consultarArquivoPorUsuario: function (usuario, fileName, callback) {
 
-		var select = 'select ARQ_ID as chavePrimaria from arquivo where USU_ID = ? AND ARQ_NM = ?';
+		var select = 'select ARQ_ID as chavePrimaria from ARQUIVO where USU_ID = ? AND ARQ_NM = ?';
 		pool.getConnection(function(err, connection) {
 	    	// Use the connection
 		    connection.query(select, [usuario, fileName], function (err, result) {
@@ -83,7 +83,7 @@ var controladorArquivo =  {
 		});
 	},
 	inserirArquivo: function (chaveUsuario, nomeArquivo) {
-		var insert = 'INSERT INTO arquivo (USU_ID, ARQ_NM, ARQ_SYN, ARQ_REMOVIDO) VALUES (?, ?, 1, 0)';
+		var insert = 'INSERT INTO ARQUIVO (USU_ID, ARQ_NM, ARQ_SYN, ARQ_REMOVIDO) VALUES (?, ?, 1, 0)';
 		var params = [chaveUsuario, nomeArquivo];
 		pool.getConnection(function(err, connection) {
 	    	// Use the connection
@@ -98,7 +98,7 @@ var controladorArquivo =  {
 	},
 	updateArquivo: function (idArquivo) {
 
-		var update = 'update arquivo set arq_removido = 0, arq_syn = 1 where arq_id = ?';
+		var update = 'update ARQUIVO set arq_removido = 0, arq_syn = 1 where arq_id = ?';
 		var params = [idArquivo];
 		pool.getConnection(function(err, connection) {
 	    	// Use the connection
