@@ -5,7 +5,10 @@ var controladorCompartilhamento =  {
 
 		if (!chaveUsuario) return;
 		console.log(chaveUsuario);
-		var select = 'select arq.arq_id as chavePrimaria, arq.arq_nm as nome, comp.comp_syn as sincronizado, comp.comp_ativo as ativo, 1 as compartilhado, usu_dono.usu_login as usuario, usu_comp.usu_login as usuarioCompartilhamento  from COMPARTILHAMENTO comp ' +
+		var select = 'select arq.arq_id as chavePrimaria, ' +
+					 'arq.arq_nm as nome, comp.comp_syn as sincronizado, comp.comp_ativo as ativo, ' +
+					 '1 as compartilhado, usu_dono.usu_login as usuario, usu_comp.usu_login as usuarioCompartilhamento  ' +
+					 'from COMPARTILHAMENTO comp ' +
 					 'inner join USUARIO usu_comp on usu_comp.usu_id = comp.usu_id_comp ' +
 					 'inner join USUARIO usu_dono on usu_dono.usu_id = comp.usu_id_prop  ' +
 					 'inner join ARQUIVO arq on arq.arq_id = comp.arq_id ' +

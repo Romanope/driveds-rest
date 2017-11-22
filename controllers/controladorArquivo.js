@@ -5,7 +5,14 @@ var controladorArquivo =  {
 
 		if (!chaveUsuario) return;
 		console.log(chaveUsuario);
-		var select = "select arq.arq_id as chavePrimaria, ARQ.ARQ_NM as nome, ARQ.ARQ_SYN as sincronizado, ARQ.ARQ_REMOVIDO as removido, 0 as compartilhado, USU.USU_LOGIN as usuario from ARQUIVO ARQ INNER JOIN USUARIO USU ON USU.USU_ID = ARQ.USU_ID WHERE USU.USU_ID = ?";
+		var select = 'select ARQ.ARQ_ID as chavePrimaria, ' + 
+					  		'ARQ.ARQ_NM as nome, ' +
+					  		'ARQ.ARQ_SYN as sincronizado, ' +
+					  		'ARQ.ARQ_REMOVIDO as removido, ' +
+					  		'0 as compartilhado, ' +
+					  		'USU.USU_LOGIN as usuario ' +
+					  		'from ARQUIVO ARQ ' +
+					  		'INNER JOIN USUARIO USU ON USU.USU_ID = ARQ.USU_ID WHERE USU.USU_ID = ?"';
 		
 		if (sincronizado) {
 			select = select + ' and ARQ.ARQ_SYN = 0';
@@ -98,7 +105,7 @@ var controladorArquivo =  {
 	},
 	updateArquivo: function (idArquivo) {
 
-		var update = 'update ARQUIVO set arq_removido = 0, arq_syn = 1 where arq_id = ?';
+		var update = 'update ARQUIVO set ARQ_REMOVIDO = 0, ARQ_SYN = 1 where ARQ_ID = ?';
 		var params = [idArquivo];
 		pool.getConnection(function(err, connection) {
 	    	// Use the connection
