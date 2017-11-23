@@ -1,17 +1,7 @@
-var fs = require("fs");
-var walk = require("walk");
+var number = null;
 
-walker = walk.walk("./teste");
- 
-  walker.on("file", function (root, fileStats, next) {
-    
-	fs.readFile(fileStats.name, function () {
-      console.log(fileStats);
-	  next();
-    });
-  });
+try {
+	console.log(number.length);
+} catch (e) {console.log(e);console.log('ocorreu um erro')}
 
-/*fs.stat('app.js', function (err, stats) {
-  if (err) throw err;
-  console.log('stats: ' + JSON.stringify(stats));
-});*/
+console.log('finalizando execucao');

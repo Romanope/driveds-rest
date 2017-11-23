@@ -15,97 +15,124 @@ router.get('/sincronizar/:usuario', function (req, res) {
 	
 	var usuario = req.params.usuario;
 	
-	controladorArquivo.consultarArquivoNaoSincronizados(usuario, function (arquivosPessoais) {
+	try {
+    	controladorArquivo.consultarArquivoNaoSincronizados(usuario, function (arquivosPessoais) {
 		
-		controladorCompartilhamento.consultarAquivosCompartilhados(usuario, function (arquivosCompartilhamentos) {
+			controladorCompartilhamento.consultarAquivosCompartilhados(usuario, function (arquivosCompartilhamentos) {
 
-			var allFiles = arquivosPessoais.concat(arquivosCompartilhamentos);
-			
-			res.status(200).json(allFiles);
+				var allFiles;
+				if (arquivosPessoais) {
+					allFiles = arquivosPessoais.concat(arquivosCompartilhamentos);
+				} else {
+					allFiles = arquivosCompartilhamentos;
+				}
+
+				res.status(200).json(allFiles);
+			}, true);
 		}, true);
-	}, true);
+	} catch (e) {
+      res.status(500).send(e);
+    }
 });
 
 router.get('/sincronizacaoInicial/:usuario', function (req, res) {
 
 	var usuario = req.params.usuario;
 	
-	controladorArquivo.consultarArquivoNaoSincronizados(usuario, function (arquivosPessoais) {
+	try {
+		controladorArquivo.consultarArquivoNaoSincronizados(usuario, function (arquivosPessoais) {
 		
-		controladorCompartilhamento.consultarAquivosCompartilhados(usuario, function (arquivosCompartilhamentos) {
+			controladorCompartilhamento.consultarAquivosCompartilhados(usuario, function (arquivosCompartilhamentos) {
 
-			var allFiles = arquivosPessoais.concat(arquivosCompartilhamentos);
-			
-			res.status(200).json(allFiles);
+				var allFiles = arquivosPessoais.concat(arquivosCompartilhamentos);
+				
+				res.status(200).json(allFiles);
+			}, false);
 		}, false);
-	}, false);
+	} catch (e) {
+		res.status(500).send(e);
+	}
 });
 
 router.post('/obterArquivo', function (req, res) {
 
-	var usuario = req.body.usuario;
-	var fileName = req.body.nome;
+	try {
+		var usuario = req.body.usuario;
+		var fileName = req.body.nome;
 
-	controladorDiretorio.consultarArquivoByusuario(usuario, fileName, function (result) {
-		res.status(200).json(result);
-	});
+		controladorDiretorio.consultarArquivoByusuario(usuario, fileName, function (result) {
+			res.status(200).json(result);
+		});
+	} catch (e) {
+ 		res.status(500).send(e);
+	}
 });
 
 router.post('/', function (req, res) {
-	console.log("arquivo recebido");
-	console.log(req.body.length);
-	var arquivos = req.body;
-
-	var arquivo = arquivos[0];
-
 	
-	amazonS3Adapter.uploadFile(arquivo.usuario, arquivo.nome, arquivo.data, function (data) {
-		
-		controladorArquivo.consultarArquivoPorUsuario(arquivo.usuario, arquivo.nome, function (resultSet) {
-			console.log('resultSet: ' + resultSet);
-			if (resultSet.length == 0) {
-				controladorArquivo.inserirArquivo(arquivo.chaveUsuario, arquivo.nome);
-			} else if (resultSet.length == 1) {
-				controladorArquivo.updateArquivo(resultSet.chavePrimaria);
-			}
-			console.log('return of the AmazonS3 ' + data);	
-			res.status(200).end();	
+	console.log(req.body.length);
+	
+	try {
+		var arquivos = req.body;
+		var arquivo = arquivos[0];
+		var tamanho = arquivo.tamanho;
+		amazonS3Adapter.uploadFile(arquivo.usuario, arquivo.nome, arquivo.data, function (data) {
+			
+			controladorArquivo.consultarArquivoPorUsuario(arquivo.usuario, arquivo.nome, function (resultSet) {
+				console.log('resultSet: ' + resultSet);
+				if (resultSet.length == 0) {
+					controladorArquivo.inserirArquivo(arquivo.chaveUsuario, arquivo.nome, tamanho);
+				} else if (resultSet.length == 1) {
+					controladorArquivo.updateArquivo(resultSet.chavePrimaria);
+				}
+				console.log('return of the AmazonS3 ' + data);	
+				res.status(200).end();	
+			});
 		});
-	});
+	} catch (e) {
+		res.status(500).send(e);
+	}
 });
 
 router.post('/atualizarSincronizacaoArquivos', function (req, res) {
 
-	var arquivos = req.body;
-	console.log(arquivos);
+	try {
+		var arquivos = req.body;
+		console.log(arquivos);
 
-	for (var i = 0; i < arquivos.length; i++) {
-		if (!arquivos[i].compartilhado) {
-			console.log('atualizando flag de sincronização do arquivo PESSOAL ' + arquivos[i].nome);
-			controladorArquivo.atualizarSincronizacaoArquivos(arquivos[i]);
-		} else {
-			console.log('atualizando flag de sincronização do arquivo COMPARTILHADO ' + arquivos[i].nome);
-			controladorCompartilhamento.atualizarFlagCompartilhamento(arquivos[i]);
+		for (var i = 0; i < arquivos.length; i++) {
+			if (!arquivos[i].compartilhado) {
+				console.log('atualizando flag de sincronização do arquivo PESSOAL ' + arquivos[i].nome);
+				controladorArquivo.atualizarSincronizacaoArquivos(arquivos[i]);
+			} else {
+				console.log('atualizando flag de sincronização do arquivo COMPARTILHADO ' + arquivos[i].nome);
+				controladorCompartilhamento.atualizarFlagCompartilhamento(arquivos[i]);
+			}
 		}
-	}
 
-	res.status(200).end();
+		res.status(200).end();
+	} catch (e) {
+		res.status(500).send(e);
+	}
 });
 
 
 router.delete('/:nomeArquivo/:usuario', function (req, res) {
 	
-	var usuario = req.params.usuario;
-	
-	var nomeArquivo = req.params.nomeArquivo;
-	
-	amazonS3Adapter.deleteFile(usuario, nomeArquivo, function (result) {
+	try {
+		var usuario = req.params.usuario;
+		var nomeArquivo = req.params.nomeArquivo;
+		
+		amazonS3Adapter.deleteFile(usuario, nomeArquivo, function (result) {
 
-		if (result) {
-			controladorArquivo.removerArquivo(usuario, nomeArquivo);
-		}
-		res.status(200).send(result);
-	});	
+			if (result) {
+				controladorArquivo.removerArquivo(usuario, nomeArquivo);
+			}
+			res.status(200).send(result);
+		});	
+	} catch (e) {
+		res.status(500).send(e);
+	}
 });
 
 

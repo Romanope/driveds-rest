@@ -7,7 +7,8 @@ var controladorCompartilhamento =  {
 		console.log(chaveUsuario);
 		var select = 'select arq.arq_id as chavePrimaria, ' +
 					 'arq.arq_nm as nome, comp.comp_syn as sincronizado, comp.comp_ativo as ativo, ' +
-					 '1 as compartilhado, usu_dono.usu_login as usuario, usu_comp.usu_login as usuarioCompartilhamento  ' +
+					 '1 as compartilhado, usu_dono.usu_login as usuario, usu_comp.usu_login as usuarioCompartilhamento, ' +
+					 'arq.ARQ_DH_ULT_MODIFICACAO as ultimaModificacao, arq.ARQ_TAMANHO as tamanho ' +
 					 'from COMPARTILHAMENTO comp ' +
 					 'inner join USUARIO usu_comp on usu_comp.usu_id = comp.usu_id_comp ' +
 					 'inner join USUARIO usu_dono on usu_dono.usu_id = comp.usu_id_prop  ' +

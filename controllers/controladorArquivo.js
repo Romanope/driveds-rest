@@ -10,9 +10,11 @@ var controladorArquivo =  {
 					  		'ARQ.ARQ_SYN as sincronizado, ' +
 					  		'ARQ.ARQ_REMOVIDO as removido, ' +
 					  		'0 as compartilhado, ' +
-					  		'USU.USU_LOGIN as usuario ' +
+					  		'USU.USU_LOGIN as usuario, ' +
+					  		'ARQ.ARQ_TAMANHO as tamanho, ' +
+					  		'ARQ.ARQ_DH_ULT_MODIFICACAO as ultimaModificacao ' +
 					  		'from ARQUIVO ARQ ' +
-					  		'INNER JOIN USUARIO USU ON USU.USU_ID = ARQ.USU_ID WHERE USU.USU_ID = ?"';
+					  		'INNER JOIN USUARIO USU ON USU.USU_ID = ARQ.USU_ID WHERE USU.USU_ID = ?';
 		
 		if (sincronizado) {
 			select = select + ' and ARQ.ARQ_SYN = 0';
@@ -89,9 +91,9 @@ var controladorArquivo =  {
 			});
 		});
 	},
-	inserirArquivo: function (chaveUsuario, nomeArquivo) {
-		var insert = 'INSERT INTO ARQUIVO (USU_ID, ARQ_NM, ARQ_SYN, ARQ_REMOVIDO) VALUES (?, ?, 1, 0)';
-		var params = [chaveUsuario, nomeArquivo];
+	inserirArquivo: function (chaveUsuario, nomeArquivo, tamanho) {
+		var insert = 'INSERT INTO ARQUIVO (USU_ID, ARQ_NM, ARQ_SYN, ARQ_REMOVIDO, ARQ_TAMANHO, ARQ_DH_ULT_MODIFICACAO) VALUES (?, ?, 1, 0, ?, ?)';
+		var params = [chaveUsuario, nomeArquivo, tamanho, new Date()];
 		pool.getConnection(function(err, connection) {
 	    	// Use the connection
 		    connection.query(insert, params, function (err, result) {
