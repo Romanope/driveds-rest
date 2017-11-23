@@ -99,16 +99,15 @@ var controladorArquivo =  {
 		    connection.query(insert, params, function (err, result) {
 		    	// And done with the connection.
 			    connection.release();
-
 			    // Handle error after the release.
 			    if (err) throw err;
 			});
 		});	
 	},
-	updateArquivo: function (idArquivo) {
+	updateArquivo: function (chaveUsuario, nomeArquivo, tamanho) {
 
-		var update = 'update ARQUIVO set ARQ_REMOVIDO = 0, ARQ_SYN = 1 where ARQ_ID = ?';
-		var params = [idArquivo];
+		var update = 'update ARQUIVO set ARQ_REMOVIDO = 0, ARQ_SYN = 1, ARQ_TAMANHO = ? where USU_ID = ? AND ARQ_NM = ?';
+		var params = [tamanho, chaveUsuario, nomeArquivo];
 		pool.getConnection(function(err, connection) {
 	    	// Use the connection
 		    connection.query(update, params, function (err, result) {

@@ -78,12 +78,14 @@ router.post('/', function (req, res) {
 		var tamanho = arquivo.tamanho;
 		amazonS3Adapter.uploadFile(arquivo.usuario, arquivo.nome, arquivo.data, function (data) {
 			
-			controladorArquivo.consultarArquivoPorUsuario(arquivo.usuario, arquivo.nome, function (resultSet) {
+			controladorArquivo.consultarArquivoPorUsuario(arquivo.chaveUsuario, arquivo.nome, function (resultSet) {
 				console.log('resultSet: ' + resultSet);
 				if (resultSet.length == 0) {
+					console.log('inserindo arquivo: ' + arquivo.nome);
 					controladorArquivo.inserirArquivo(arquivo.chaveUsuario, arquivo.nome, tamanho);
 				} else if (resultSet.length == 1) {
-					controladorArquivo.updateArquivo(resultSet.chavePrimaria);
+					console.log('atualizando arquivo:' + arquivo.nome);
+					controladorArquivo.updateArquivo(arquivo.chaveUsuario, arquivo.nome, tamanho);
 				}
 				console.log('return of the AmazonS3 ' + data);	
 				res.status(200).end();	
