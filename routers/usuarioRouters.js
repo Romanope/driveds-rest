@@ -17,16 +17,64 @@ router.get('/book/photos', function (req, res) {
           alt: 'Leão'
         },
         {
-          url: 'http://www.verita.vet.br/blog/wp-content/uploads/2018/02/guepardo.png',
-          alt: 'Guepardo'
-        },
-        {
           url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
           alt: 'Leão'
         },
-        {
-          url: 'http://www.verita.vet.br/blog/wp-content/uploads/2018/02/guepardo.png',
-          alt: 'Guepardo'
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
+        },
+		{
+          url: 'https://cdn-images-1.medium.com/max/1200/1*ArtyUZ73clgqqSoASy6I2A.png',
+          alt: 'Leão'
         }
       ]
 
